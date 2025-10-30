@@ -2,8 +2,8 @@ package biblioteca.simple.modelo;
 
 public abstract class Producto {
     protected int id;
-    protected String titulo;
-    protected String anio;
+    public String titulo;
+    public String anio;
     protected Formato formato;
 
     //Este constructor recibe objetos de la base de datos
