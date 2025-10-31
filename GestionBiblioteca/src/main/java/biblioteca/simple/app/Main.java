@@ -1,14 +1,15 @@
 package biblioteca.simple.app;
 
-import biblioteca.simple.modelo.Formato;
-import biblioteca.simple.modelo.Libro;
-import biblioteca.simple.modelo.Pelicula;
-import biblioteca.simple.modelo.Usuario;
+import biblioteca.simple.contratos.Prestable;
+import biblioteca.simple.modelo.*;
 import biblioteca.simple.servicios.Catalogo;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+
+import static java.util.Locale.filter;
 
 public class Main {
     private static final Catalogo catalogo = new Catalogo();
@@ -54,6 +55,30 @@ public class Main {
         }while (op !=0);
     }
     public static void listar(){
-        List<>
+        List<Producto> lista = catalogo.listar();
+        if(lista.isEmpty()){
+            System.out.println("Catalogo vacio");
+            return;
+        }
+        System.out.println("==LISTA DE PRODUCTOS==");
+        for(Producto p : lista) System.out.println("- "+p);
+    }
+    private static void buscarPorTitulo(){
+        System.out.println("Título (escribe parte del título");
+        String t = sc.nextLine();
+        catalogo.buscar(t).forEach(p-> System.out.println("- "+ p));
+    }
+    private static void buscarPorAnio(){
+        System.out.println("Año: ");
+        int a = sc.nextInt();
+        sc.nextLine();
+        catalogo.buscar(a).forEach(p-> System.out.println("- "+ p));
+    }
+
+    private static void prestar() {
+        //1) Mostrar productos disponibles
+        List<Producto> disponibles = catalogo.listar().stream()
+                .filter(p->p instanceof Prestable pN && !pN.estaPrestado())
+                .collect(Collectors.toList());
     }
 }
