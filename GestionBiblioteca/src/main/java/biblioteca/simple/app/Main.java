@@ -44,6 +44,7 @@ public class Main {
             System.out.println("-5- Devolver producto");
             System.out.println("-6- Exportar usuarios");
             System.out.println("-7- Importar usuarios");
+            System.out.println("-8- Crear usuario");
             System.out.println("-0- Salir");
             while (!sc.hasNextInt()) sc.next();
             op = sc.nextInt();
@@ -57,6 +58,7 @@ public class Main {
                 case 5 -> devolver();
                 case 6 -> exportarUsuario();
                 case 7 -> importarUsuarios();
+                case 8 -> crearUsuario();
                 case 0 -> System.out.println("Adios!!!!");
                 default -> System.out.println("Opción no válida");
             }
@@ -141,7 +143,29 @@ public class Main {
         Usuario u1 = getUsuarioPorCodigo(cUsuario);
 
         if (u1 == null) {
-            System.out.println("Usuario no encontrado.");
+            System.out.println("Usuario no encontrado. ¿Creamos ahora el usuario? s/n");
+            String respuesta = "";
+            try {
+                respuesta = sc.nextLine().trim();
+            } catch (Exception e) {
+                System.out.println("No es una respuesta correcta. Se cancela la operación");
+                return;
+            }
+            if (respuesta.equalsIgnoreCase("s")){
+                try{
+                    crearUsuario();
+                    u1 = getUsuarioPorCodigo(cUsuario);
+                } catch (Exception e) {
+                    System.out.println("==ERROR== El usuario no ha sido creado de forma correcta" + e.getMessage());
+                    return;
+                }
+            }else if (respuesta.equalsIgnoreCase("n")){
+                System.out.println("==OPERACIÓN CANCELADA==");
+                return;
+            }else {
+                System.out.println("==RESPUESTA NO ADMITIDA== Escribe s ó n");
+                return;
+            }
         }
         Prestable pPrestable = (Prestable) pEncontrado;
         pPrestable.prestar(u1);
@@ -198,5 +222,17 @@ public class Main {
         }catch (Exception e){
             System.out.println("Error al importar: " + e.getMessage());
         }
+    }
+
+    public static void crearUsuario() {
+        System.out.println("ID del usuario: ");
+        int id = sc.nextInt();
+        sc.nextLine();
+        System.out.println("Nombre del usuario:");
+        String nombre = sc.nextLine();
+        Usuario nuevo =  new Usuario(id, nombre);
+        usuarios.add(nuevo);
+        System.out.println("El nuevo usuario ha sido creado correctamente");
+
     }
 }
